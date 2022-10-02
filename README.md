@@ -25,7 +25,7 @@ If this tool should contribute to a publication please cite as:
 
 @misc{GeoV,    
   title = {GeoV},   
-  author = {Jakob Niessner, Yannick Dreher and Kerstin Göpfrich},   
+  author = {Jakob Niessner, Yannik Dreher and Kerstin Göpfrich},   
   note = {https://github.com/jabrucohee/GeoV/edit/main/README.md},   
   year = {2022}   
 }
