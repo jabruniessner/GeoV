@@ -15,8 +15,6 @@ polyscope was developed by Nick Sharp and others and pymeshlab was developes by 
 
 Many thanks for the great work the developers have done and providing these tools as Open Source for everyone to use
 
-
-
 ## License
 
 The parts that I have written are licensed under the GPL v. 3 license found here:
@@ -31,6 +29,14 @@ If this tool should contribute to a publication please cite as:
   note = {https://github.com/jabrucohee/GeoV/edit/main/README.md},   
   year = {2022}   
 }
+
+The website of our (my former) group:
+
+https://goepfrichgroup.de/
+
+## A small Request at the beginning:
+
+As this project is only now about to become public many bugs and incompletness cannot be avoided. We are therefore very thankful for any bug report feedback inspiration and new ideas of what could still be implemented. We always try to help! Especially if there is a problem with the installation don't hesitate to ask for help!
 
 ## Installation
 
