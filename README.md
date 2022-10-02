@@ -11,7 +11,7 @@ and
 
 https://github.com/cnr-isti-vclab/PyMeshLab
 
-polyscope was developed by Nick Sharp and others and pymeshlab was developes by The Visual computing lab- ISTI - CNR
+polyscope was developed by Nick Sharp and others and pymeshlab was developed by The Visual computing lab- ISTI - CNR
 
 Many thanks for the great work the developers have done and providing these tools as Open Source for everyone to use
 
