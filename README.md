@@ -34,7 +34,7 @@ The website of our (my former) group:
 
 https://goepfrichgroup.de/
 
-## A small Request at the beginning:
+## A small request at the beginning:
 
 As this project is only now about to become public many bugs and incompletness cannot be avoided. We are therefore very thankful for any bug report feedback inspiration and new ideas of what could still be implemented. We always try to help! Especially if there is a problem with the installation don't hesitate to ask for help!
 
