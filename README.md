@@ -3,7 +3,7 @@ This project aims to be a toolbox for the geometric analysis of Biological vesic
 
 
 ## Thanks
-First of all I would like to say that this project is largely based on the two python packages pymeshlab and polyscope, found under the following links:
+First of all, I would like to say that this project is largely based on the two python packages pymeshlab and polyscope, found under the following links:
 
 https://polyscope.run/py/
 
