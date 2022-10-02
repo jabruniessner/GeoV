@@ -19,7 +19,7 @@ Many thanks for the great work the developers have done and providing these tool
 
 ## License
 
-The parts that have written are licensed under the GPL v. 3 license found here:
+The parts that I have written are licensed under the GPL v. 3 license found here:
 
 https://www.gnu.org/licenses/gpl-3.0.de.html
 
