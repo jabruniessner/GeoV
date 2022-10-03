@@ -40,6 +40,10 @@ As this project is only now about to become public many bugs and incompletness c
 
 ## Installation
 
-The program is currently unfortunaltely only available on Linux (Tested on Ubuntu) and Windows. For Mac a more complicated manual installation process is provided  
+The program is currently unfortunaltely only supported on Linux (Tested on Ubuntu) and Windows. For Mac a more complicated manual installation process is provided. Since it only depends on a bunch of python scripts, the installation is simply equivalent to installing all the necessary python packages. (except for polyscope, I made one or two slight changes to the source code, it therefore needs to be compiled.)
+
+### Linux:
+The included bash script "Installation.sh" creates a virtual environment installs all necessary packages and then compiles the right version of Polyscope.
+If you are interested in this, simply run in your terminal `git clone --recursive ...` cd to the cloned directiry and run `bash Installation.sh`
 
 
