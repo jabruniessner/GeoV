@@ -44,6 +44,18 @@ The program is currently unfortunaltely only supported on Linux (Tested on Ubunt
 
 ### Linux:
 The included bash script "Installation.sh" creates a virtual environment installs all necessary packages and then compiles the right version of Polyscope.
-If you are interested in this, simply run in your terminal `git clone --recursive ...` cd to the cloned directiry and run `bash Installation.sh`
+If you are interested in this, simply run in your terminal `git clone --recursive https://github.com/jabrucohee/GeoV.git` cd to the cloned directory and run `bash Installation.sh`
+
+### Windows:
+If you would like to use Windows, there is also an installation script that can be used. Again, just run `git clone --recursive https://github.com/jabrucohee/GeoV.git` and then run `Installation.bat`. This will create a virtual environement install all the necessary dependencies and compile polyscope.
+
+### Mac:
+As already mentioned above, you can try installing all dependencies required and then then start it manually.
+
+
+
+
+
+
 
 
