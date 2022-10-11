@@ -42,6 +42,9 @@ As this project is only now about to become public many bugs and incompletness c
 
 The program is currently unfortunaltely only supported on Linux (Tested on Ubuntu) and Windows. For Mac a more complicated manual installation process is provided. Since it only depends on a bunch of python scripts, the installation is simply equivalent to installing all the necessary python packages. (except for polyscope, I made one or two slight changes to the source code, it therefore needs to be compiled.)
 
+### Polyscope-py
+Polyscope-py must be downloaded seperately from this repository: https://github.com/jabrucohee/polyscope-py. I made a slight change such that the view matrix is available. Therefore, for the installation scripts, simply clone the polyscope-py repository in the same folder as this cloned repository folder.
+
 ### Linux:
 The included bash script "Installation.sh" creates a virtual environment installs all necessary packages and then compiles the right version of Polyscope.
 If you are interested in this, simply run in your terminal `git clone --recursive https://github.com/jabrucohee/GeoV.git` cd to the cloned directory and run `bash Installation.sh`
