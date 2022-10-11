@@ -1,0 +1,8 @@
+czifile==2019.7.2
+imagecodecs==2022.8.8
+numpy==1.23.3
+opencv-python==4.6.0.66
+Pillow==9.2.0
+pymeshlab==2022.2.post2
+tifffile==2022.8.12
+tk==0.1.0
