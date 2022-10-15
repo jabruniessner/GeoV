@@ -444,19 +444,19 @@ class ViewPoints:
 
 
 
-MESHSET=pymeshlab.MeshSet()
-CURRENT_DIRECTORY = os.getcwd()
-MESHSET.load_new_mesh(CURRENT_DIRECTORY+"/Experiment-78/"+"Experiment-78+pointcloud.ply")
+# MESHSET=pymeshlab.MeshSet()
+# CURRENT_DIRECTORY = os.getcwd()
+# MESHSET.load_new_mesh(CURRENT_DIRECTORY+"/Experiment-78/"+"Experiment-78+pointcloud.ply")
 
 
 
-def main():
-    ps.init()
-    ps.look_at((0,0,1), (0,0,0))
-    ps.register_point_cloud("my point cloud", MESHSET.current_mesh().vertex_matrix(), radius = 0.001, point_render_mode='quad')
-    ViewPoints(0,0,0,15,15,15, True)
-    ps.set_user_callback(lambda MeshSet=MESHSET: ViewPoints.callback(MeshSet))
-    ps.show()
-
-if __name__ == '__main__':
-    main()
+# def main():
+#     ps.init()
+#     ps.look_at((0,0,1), (0,0,0))
+#     ps.register_point_cloud("my point cloud", MESHSET.current_mesh().vertex_matrix(), radius = 0.001, point_render_mode='quad')
+#     ViewPoints(0,0,0,15,15,15, True)
+#     ps.set_user_callback(lambda MeshSet=MESHSET: ViewPoints.callback(MeshSet))
+#     ps.show()
+#
+# if __name__ == '__main__':
+#     main()
