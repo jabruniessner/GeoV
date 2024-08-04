@@ -167,7 +167,7 @@ class PolyscopeGUI:
             psim.SameLine()
             if(psim.Button("Simplify")):
                 self.layers[self.current_step-1].set_current_mesh()
-                self.ms.generate_simplified_point_cloud(samplenum=self.sample_number, radius=pymeshlab.Percentage(self.sub_sample_perc),
+                self.ms.generate_simplified_point_cloud(samplenum=self.sample_number, radius=pymeshlab.PercentageValue(self.sub_sample_perc),
                                                             bestsampleflag = self.best_sample_bool, bestsamplepool=self.best_sample_pool_size, exactnumflag = self.exact_number_of_samples)
                 self.__simplified_count += 1
                 self.layers.append(Polymeshlabfusion.Mesh(self.ms, f"simplified cloud {self.__simplified_count}", (.2,.7,.2)))
@@ -352,7 +352,7 @@ class PolyscopeGUI:
                 self.ReconstructionOptions.Ball_pivoting()
                 if(psim.Button('Apply')):
                     self.layers[self.current_step-1].set_current_mesh()
-                    self.ms.generate_surface_reconstruction_ball_pivoting(ballradius = pymeshlab.Percentage(self.ReconstructionOptions.Reconstruction_Ball_Pivoting["Pivoting Ball Radius"]),
+                    self.ms.generate_surface_reconstruction_ball_pivoting(ballradius = pymeshlab.PercentageValue(self.ReconstructionOptions.Reconstruction_Ball_Pivoting["Pivoting Ball Radius"]),
                                                                     clustering = self.ReconstructionOptions.Reconstruction_Ball_Pivoting["Clustering Radius" ],
                                                                     creasethr = self.ReconstructionOptions.Reconstruction_Ball_Pivoting["Angle threshold"],
                                                                     deletefaces = self.ReconstructionOptions.Reconstruction_Ball_Pivoting["Delete original set of faces"])
@@ -365,7 +365,7 @@ class PolyscopeGUI:
                 self.ReconstructionOptions.VCG()
                 if(psim.Button('Apply')):
                     self.layers[self.current_step-1].set_current_mesh()
-                    self.ms.generate_surface_reconstruction_vcg(voxsize = pymeshlab.Percentage(self.ReconstructionOptions.Reconstruction_VCG["Voxel size"]),
+                    self.ms.generate_surface_reconstruction_vcg(voxsize = pymeshlab.PercentageValue(self.ReconstructionOptions.Reconstruction_VCG["Voxel size"]),
                                                                 subdiv = self.ReconstructionOptions.Reconstruction_VCG["SubVol Splitting"],
                                                                 geodesic = self.ReconstructionOptions.Reconstruction_VCG["Geodesic Weighting"],
                                                                 openresult = self.ReconstructionOptions.Reconstruction_VCG["Show Result"],
@@ -403,7 +403,7 @@ class PolyscopeGUI:
                     self.ms.set_selection_none()
                     self.ms.apply_coord_depth_smoothing(stepsmoothnum =self.smoothingOptions.DepthSmooth["Smoothing steps"],
                                                         viewpoint = self.smoothingOptions.DepthSmooth["view point" ],
-                                                        delta=pymeshlab.Percentage(self.smoothingOptions.DepthSmooth["Strength"]),
+                                                        delta=pymeshlab.PercentageValue(self.smoothingOptions.DepthSmooth["Strength"]),
                                                         selected = self.smoothingOptions.DepthSmooth["Affect only selection"])
                     self.layers[self.current_step-1].Update()
 
@@ -438,7 +438,7 @@ class PolyscopeGUI:
 
                 if(psim.Button('Apply')):
                     self.ms.apply_coord_laplacian_smoothing_scale_dependent(stepsmoothnum=self.smoothingOptions.Scale_dep_Laplace["Smoothing Steps"],
-                                                                            delta= pymeshlab.Percentage(self.smoothingOptions.Scale_dep_Laplace["delta"]),
+                                                                            delta= pymeshlab.PercentageValue(self.smoothingOptions.Scale_dep_Laplace["delta"]),
                                                                             selected = self.smoothingOptions.Scale_dep_Laplace["Affect only selected faces"])
                     self.layers[self.current_step-1].Update()
 
@@ -634,6 +634,7 @@ class PolyscopeGUI:
                 import tifffile
 
                 imgs = np.squeeze(czifile.CziFile(self.master.CurrentFolder+"/"+self.file).asarray())[self.channelnum]
+                data_type = imgs.dtype
 
                 images = []
                 for id, mesh in enumerate(self.Slicing.meshes):
@@ -643,7 +644,26 @@ class PolyscopeGUI:
                                                                             self.Slicing.resolution_x, self.Slicing.resolution_y)
                     image = np.transpose(image)
 
-                    images.append([image, imgs[id], np.zeros((self.Slicing.resolution_x, self.Slicing.resolution_y), dtype = np.uint8)])
+                    
+
+                    new_image =  np.zeros((self.Slicing.resolution_x, self.Slicing.resolution_y), dtype = data_type)
+
+                    indices = np.argwhere(image==255)
+                    
+                    for index in indices:
+                        new_image[index[0], index[1]] = np.iinfo(data_type).max 
+                        new_image[index[0]+1, index[1]] = np.iinfo(data_type).max 
+                        new_image[index[0]-1, index[1]] = np.iinfo(data_type).max 
+                        new_image[index[0], index[1]+1] = np.iinfo(data_type).max 
+                        new_image[index[0], index[1]-1] = np.iinfo(data_type).max 
+                        new_image[index[0]+1, index[1]+1] = np.iinfo(data_type).max 
+                        new_image[index[0]+1, index[1]-1] = np.iinfo(data_type).max 
+                        new_image[index[0]-1, index[1]+1] = np.iinfo(data_type).max 
+                        new_image[index[0]-1, index[1]-1] = np.iinfo(data_type).max 
+
+                
+
+                    images.append([new_image, imgs[id], np.zeros((self.Slicing.resolution_x, self.Slicing.resolution_y), dtype = data_type)])
 
 
                 images = np.array(images)
@@ -972,7 +992,7 @@ class PolyscopeGUI:
                         ms2 = pymeshlab.MeshSet()
                         m = pymeshlab.Mesh(vertex_matrix = vertices, face_matrix= faces)
                         ms2.add_mesh(m)
-                        ms2.compute_curvature_principal_directions_per_vertex(scale = pymeshlab.Percentage(self.CurvatureScale), curvcolormethod = type, method='Scale Dependent Quadric Fitting')
+                        ms2.compute_curvature_principal_directions_per_vertex(scale = pymeshlab.PercentageValue(self.CurvatureScale), curvcolormethod = type, method='Scale Dependent Quadric Fitting')
                         self.ms.add_mesh(ms2.current_mesh())
                         self.master.layers.append(Polymeshlabfusion.Mesh(self.ms,f"colorized by curvature {self.master.get_mesh_num()}", color=(0.2, 0.2, 0.2)))
 
@@ -1024,7 +1044,7 @@ class PolyscopeGUI:
         def Geometric_Measures(self):
             if(psim.Button("Compute Geometric measures")):
                 geometric_measures = self.ms.get_geometric_measures()
-                print(geometric_measures['surface_area'])
+                for key in geometric_measures: print(f"{key}: {geometric_measures[key]}")
 
 
 
@@ -1043,7 +1063,7 @@ class PolyscopeGUI:
                                                                                                                self.Geod_dista_from_point["view point"][1],
                                                                                                                self.Geod_dista_from_point["view point"][2]]),
 
-                                                                                        maxdistance = pymeshlab.Percentage(self.Geod_dista_from_point["Max Distance"]))
+                                                                                        maxdistance = pymeshlab.PercentageValue(self.Geod_dista_from_point["Max Distance"]))
 
 
             psim.PopItemWidth()

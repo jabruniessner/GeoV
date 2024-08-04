@@ -18,12 +18,23 @@ def get_czi_images(imagefile, channelnum):
         tiff = np.squeeze(tiff_file.asarray()).astype("uint32")
         return tiff
 
+def resize_stack(stack):
+        if stack.shape[1]>600:
+            stack = np.array([cv2.resize(img, dsize=(512, 512*int(stack.shape[2]/stack.shape[1])),
+             interpolation=cv2.INTER_CUBIC) for img in stack])
+        
+        if stack.shape[2]>600:
+            stack = np.array([cv2.resize(img, dsize=(512*int(stack.shape[1]/stack.shape[2]), 512),
+             interpolation=cv2.INTER_CUBIC) for img in stack])
+
+        return stack
+
 
 class Imageviewer:
     def __init__(self, master, stack):
         self.master=master
         self.master.title('Threshold chooser')
-        self.stack=stack
+        self.stack=resize_stack(stack)
         self.threshold_external = self.threshold = 255 #setting the default threshold
         self.current = 0
         #This is the size of the filter for the denoising step
@@ -51,7 +62,7 @@ class Imageviewer:
         self.denois.grid(row=3, column=0)
 
 
-
+    
 
     def updateimages(self, number: int):
         p=self.binarize(int(number))
@@ -95,6 +106,10 @@ class Imageviewer:
 
         ok=ttk.Button(window, text="Ok", command=lambda:[press_ok(), window.destroy()])
         ok.grid(row=2, column=0, padx=20)
+
+
+    
+
 
 
 

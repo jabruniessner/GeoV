@@ -113,6 +113,7 @@ class ReconProgram:
         return points
 
     def images_from_file(self, file, channelnum):
+            
 
             img=None
             if file[-4:]=='.czi':
@@ -120,6 +121,14 @@ class ReconProgram:
                 print(img.shape)
             elif file[-4:]=='.tif':
                 img = np.squeeze(tifffile.TiffFile(file).asarray())
+            elif file[-4:]=='.lif':
+                from readlif.reader import LifFile
+                new_file = LifFile(file)
+                img_0 = new.get_image(0)
+                z_list = [i for i in img_0.get_iter_z(t=0, c=0)]
+                liste = [np.array(new.get_frame(z=i, t=0, c=0)) for i in range(len(z_list))]
+                img = np.array(liste)
+
             else:
                 raise ValueError
             return img

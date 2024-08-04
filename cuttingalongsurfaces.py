@@ -12,7 +12,7 @@ TEMP = sys.stdout
 #take a photo of the cross section
 def take_cross_section_photo(vertex_matrix, rangex, rangey, resolutionx, resolutiony):
 
-    blackimage = np.zeros(shape=(resolutionx, resolutiony), dtype=np.int8)
+    blackimage = np.zeros(shape=(resolutionx, resolutiony), dtype=np.uint8)
     stepsizex = (rangex[1]-rangex[0])/resolutionx
     stepsizey = (rangey[1]-rangey[0])/resolutiony
     for i in vertex_matrix:
