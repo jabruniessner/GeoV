@@ -80,7 +80,11 @@ class Askopenfolder:
         dir = os.getcwd()
         os.chdir(os.path.abspath(os.sep))
         user = getpass.getuser()
-        os.chdir("media/"+user)
+        try:
+            os.chdir("media/"+user)
+        except FileNotFoundError:
+            os.chdir("/run/media/"+user)
+        
         externallocs = os.listdir()
         os.chdir(dir)
         return externallocs
