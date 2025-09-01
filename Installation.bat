@@ -1,7 +1,7 @@
 python -m venv reconProgram
-call reconProgram\scripts\activate.bat
+call reconProgram\Scripts\activate.ps1
 cd polyscope-py
-python setup.py install
+python -m pip install .
 cd ..
 pip install -r requirements.txt
 

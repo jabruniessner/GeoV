@@ -146,6 +146,9 @@ class PolyscopeGUI:
                     self.current_step=self.current_step-1
 
 
+            psim.TreePop()
+
+
 
 
 
@@ -175,6 +178,8 @@ class PolyscopeGUI:
 
                 #proceed to the next step
                 self.current_step = len(self.layers)
+
+            psim.TreePop()
 
 
 
@@ -221,11 +226,14 @@ class PolyscopeGUI:
                 self.layers.append(Polymeshlabfusion.Mesh(self.ms, f"cleaned {self.cleaned_count}", (.7,.2,.2)))
                 self.current_step = len(self.layers)
 
+            psim.TreePop()
+
 
 
 
         if(psim.TreeNode('Calculate normals')):
-            with_view_point, self.view_point_selection = psim.Checkbox('Orientation of normals with respect to view point', self.view_point_selection)
+            with_view_point, self.view_point_selection = psim.Checkbox('Orientation of normals with respect to view point', 
+                                                                       self.view_point_selection)
             with_multiple, self.multiple_view_points = psim.Checkbox('Multiple view points', self.multiple_view_points)
 
             if with_multiple and not self.multiple_view_points:
@@ -236,7 +244,13 @@ class PolyscopeGUI:
                 probecontrol.ViewPoints.probes[0].Create_bounding_box = True
 
                 if(psim.Button('Add view point')):
-                    probecontrol.ViewPoints(self.view_point_x, self.view_point_y, self.view_point_z, self.range_y, self.range_y, self.range_z, Create_bounding_box=True)
+                    probecontrol.ViewPoints(self.view_point_x, 
+                                            self.view_point_y, 
+                                            self.view_point_z, 
+                                            self.range_y, 
+                                            self.range_y, 
+                                            self.range_z, 
+                                            Create_bounding_box=True)
 
             else:
                 probecontrol.ViewPoints.probes[0].Create_bounding_box = False
@@ -253,7 +267,9 @@ class PolyscopeGUI:
             psim.SameLine()
 
             psim.PushItemWidth(100)
-            number_of_neighbours_normals_selected, self.number_of_neighbours_normals= psim.InputInt('Number of neighbours', self.number_of_neighbours_normals, step = 1)
+            number_of_neighbours_normals_selected, self.number_of_neighbours_normals= psim.InputInt(
+                    'Number of neighbours', 
+                    self.number_of_neighbours_normals, step = 1)
             psim.PopItemWidth()
 
 
@@ -261,10 +277,18 @@ class PolyscopeGUI:
             if(psim.Button('Calculate Normals')):
                 if not self.multiple_view_points:
                     self.layers[self.current_step-1].set_current_mesh()
-                    self.ms.compute_normal_for_point_clouds(k = self.number_of_neighbours_normals, smoothiter = self.smoothiter, flipflag = self.view_point_selection,
-                                                                viewpos=[self.view_point_x, self.view_point_y, self.view_point_z])
+                    self.ms.compute_normal_for_point_clouds(
+                            k = self.number_of_neighbours_normals, 
+                            smoothiter = self.smoothiter, 
+                            flipflag = self.view_point_selection,
+                            viewpos=[self.view_point_x, self.view_point_y, self.view_point_z])
                     normals = self.ms.current_mesh().vertex_normal_matrix()
-                    self.layers[self.current_step-1].VisibleMesh.add_vector_quantity("normals", normals, radius=0.001, length=0.01, enabled=True)
+                    self.layers[self.current_step-1].VisibleMesh.add_vector_quantity(
+                            "normals", 
+                            normals, 
+                            radius=0.001, 
+                            length=0.01, 
+                            enabled=True)
 
                 elif self.multiple_view_points:
                     points, normals = probecontrol.ViewPoints.calculate_normals(self.ms)
@@ -272,7 +296,12 @@ class PolyscopeGUI:
                     self.ms.add_mesh(m)
                     self.layers.append(Polymeshlabfusion.Mesh(self.ms, f"cloud with normals", (.7,.2,.2)))
                     self.current_step = len(self.layers)
-                    self.layers[self.current_step-1].VisibleMesh.add_vector_quantity("normals", normals, radius=0.001, length=0.01, enabled=True)
+                    self.layers[self.current_step-1].VisibleMesh.add_vector_quantity(
+                            "normals", 
+                            normals, 
+                            radius=0.001, 
+                            length=0.01, 
+                            enabled=True)
 
             psim.SameLine()
             if(psim.Button('Delete View Point')):
@@ -286,6 +315,8 @@ class PolyscopeGUI:
             if(psim.Button('Load view points')):
                 self.folderdialog_load_viewpoints.set_active(True)
                 self.multiple_view_points = True
+
+            psim.TreePop()
 
 
 
@@ -315,15 +346,17 @@ class PolyscopeGUI:
                     print(f"We used {self.ms.current_mesh().vertex_number()} vertices")
 
 
-                    self.ms.generate_surface_reconstruction_screened_poisson(visiblelayer=False, depth=self.ReconstructionOptions.Reconstruction_screened_poisson["Reconstruction Depth"],
-                                                                                fulldepth = self.ReconstructionOptions.Reconstruction_screened_poisson["Adaptive Octree"],
-                                                                                cgdepth = self.ReconstructionOptions.Reconstruction_screened_poisson["Conjugate Gradients" ],
-                                                                                scale = self.ReconstructionOptions.Reconstruction_screened_poisson["Scale Factor"],
-                                                                                samplespernode = self.ReconstructionOptions.Reconstruction_screened_poisson["Minimum number of samples"],
-                                                                                pointweight = self.ReconstructionOptions.Reconstruction_screened_poisson["Interpolation Weight"],
-                                                                                iters = self.ReconstructionOptions.Reconstruction_screened_poisson["Gauss-Seidel-Relaxation"],
-                                                                                confidence =  self.ReconstructionOptions.Reconstruction_screened_poisson["Confidence Flag" ],
-                                                                                preclean = self.ReconstructionOptions.Reconstruction_screened_poisson["Pre-Clean"])
+                    self.ms.generate_surface_reconstruction_screened_poisson(
+                            visiblelayer=False, 
+                            depth=self.ReconstructionOptions.Reconstruction_screened_poisson["Reconstruction Depth"],
+                            fulldepth = self.ReconstructionOptions.Reconstruction_screened_poisson["Adaptive Octree"],
+                            cgdepth = self.ReconstructionOptions.Reconstruction_screened_poisson["Conjugate Gradients" ],
+                            scale = self.ReconstructionOptions.Reconstruction_screened_poisson["Scale Factor"],
+                            samplespernode = self.ReconstructionOptions.Reconstruction_screened_poisson["Minimum number of samples"],
+                            pointweight = self.ReconstructionOptions.Reconstruction_screened_poisson["Interpolation Weight"],
+                            iters = self.ReconstructionOptions.Reconstruction_screened_poisson["Gauss-Seidel-Relaxation"],
+                            confidence =  self.ReconstructionOptions.Reconstruction_screened_poisson["Confidence Flag" ],
+                            preclean = self.ReconstructionOptions.Reconstruction_screened_poisson["Pre-Clean"])
 
 
                     self.__mesh_num +=1
@@ -336,12 +369,17 @@ class PolyscopeGUI:
                 self.ReconstructionOptions.APSS_marching_cubes()
                 if(psim.Button('Apply')):
                     self.layers[self.current_step-1].set_current_mesh()
-                    self.ms.generate_marching_cubes_apss(filterscale=self.ReconstructionOptions.Reconstruction_APSS_marching_cubes["MLS-Filter Scale" ],
-                                                projectionaccuracy = self.ReconstructionOptions.Reconstruction_APSS_marching_cubes["Projection Accuracy (adv)"] ,
-                                                maxprojectioniters = self.ReconstructionOptions.Reconstruction_APSS_marching_cubes["Projection- Max iterations(adv)"],
-                                                sphericalparameter = self.ReconstructionOptions.Reconstruction_APSS_marching_cubes["MLS-spherical parameter"],
-                                                accuratenormal = self.ReconstructionOptions.Reconstruction_APSS_marching_cubes["Accurate Normals"],
-                                                resolution = self.ReconstructionOptions.Reconstruction_APSS_marching_cubes["Grid Resolution"])
+                    self.ms.generate_marching_cubes_apss(
+                            filterscale=self.ReconstructionOptions.Reconstruction_APSS_marching_cubes["MLS-Filter Scale" ],
+                            projectionaccuracy = 
+                            self.ReconstructionOptions.Reconstruction_APSS_marching_cubes["Projection Accuracy (adv)"] ,
+                            maxprojectioniters = 
+                            self.ReconstructionOptions.Reconstruction_APSS_marching_cubes["Projection- Max iterations(adv)"],
+                            sphericalparameter = 
+                            self.ReconstructionOptions.Reconstruction_APSS_marching_cubes["MLS-spherical parameter"],
+                            accuratenormal = 
+                            self.ReconstructionOptions.Reconstruction_APSS_marching_cubes["Accurate Normals"],
+                            resolution = self.ReconstructionOptions.Reconstruction_APSS_marching_cubes["Grid Resolution"])
 
                     self.__mesh_num +=1
                     self.layers.append(Polymeshlabfusion.Mesh(self.ms,f"reconstructed{self.__mesh_num}", color=(0.2, 0.2, 0.2)))
@@ -352,10 +390,13 @@ class PolyscopeGUI:
                 self.ReconstructionOptions.Ball_pivoting()
                 if(psim.Button('Apply')):
                     self.layers[self.current_step-1].set_current_mesh()
-                    self.ms.generate_surface_reconstruction_ball_pivoting(ballradius = pymeshlab.PercentageValue(self.ReconstructionOptions.Reconstruction_Ball_Pivoting["Pivoting Ball Radius"]),
-                                                                    clustering = self.ReconstructionOptions.Reconstruction_Ball_Pivoting["Clustering Radius" ],
-                                                                    creasethr = self.ReconstructionOptions.Reconstruction_Ball_Pivoting["Angle threshold"],
-                                                                    deletefaces = self.ReconstructionOptions.Reconstruction_Ball_Pivoting["Delete original set of faces"])
+                    self.ms.generate_surface_reconstruction_ball_pivoting(
+                            ballradius = pymeshlab.PercentageValue(
+                                self.ReconstructionOptions.Reconstruction_Ball_Pivoting["Pivoting Ball Radius"]),
+                                clustering = self.ReconstructionOptions.Reconstruction_Ball_Pivoting["Clustering Radius" ],
+                                creasethr = self.ReconstructionOptions.Reconstruction_Ball_Pivoting["Angle threshold"],
+                                deletefaces = 
+                                self.ReconstructionOptions.Reconstruction_Ball_Pivoting["Delete original set of faces"])
                     self.__mesh_num +=1
                     self.layers.append(Polymeshlabfusion.Mesh( self.ms,f"reconstructed{self.__mesh_num}", color=(0.2, 0.2, 0.2)))
                     self.current_step=len(self.layers)
@@ -365,19 +406,22 @@ class PolyscopeGUI:
                 self.ReconstructionOptions.VCG()
                 if(psim.Button('Apply')):
                     self.layers[self.current_step-1].set_current_mesh()
-                    self.ms.generate_surface_reconstruction_vcg(voxsize = pymeshlab.PercentageValue(self.ReconstructionOptions.Reconstruction_VCG["Voxel size"]),
-                                                                subdiv = self.ReconstructionOptions.Reconstruction_VCG["SubVol Splitting"],
-                                                                geodesic = self.ReconstructionOptions.Reconstruction_VCG["Geodesic Weighting"],
-                                                                openresult = self.ReconstructionOptions.Reconstruction_VCG["Show Result"],
-                                                                smoothnum = self.ReconstructionOptions.Reconstruction_VCG["Volume Laplacian Iter"],
-                                                                widenum = self.ReconstructionOptions.Reconstruction_VCG["Widening"],
-                                                                mergecolor = self.ReconstructionOptions.Reconstruction_VCG["Vertex Splatting"],
-                                                                simplification = self.ReconstructionOptions.Reconstruction_VCG["Post Merge Simplification"],
-                                                                normalsmooth = self.ReconstructionOptions.Reconstruction_VCG["Presmooth iter"])
+                    self.ms.generate_surface_reconstruction_vcg(
+                            voxsize = pymeshlab.PercentageValue(self.ReconstructionOptions.Reconstruction_VCG["Voxel size"]),
+                                        subdiv = self.ReconstructionOptions.Reconstruction_VCG["SubVol Splitting"],
+                                        geodesic = self.ReconstructionOptions.Reconstruction_VCG["Geodesic Weighting"],
+                                        openresult = self.ReconstructionOptions.Reconstruction_VCG["Show Result"],
+                                        smoothnum = self.ReconstructionOptions.Reconstruction_VCG["Volume Laplacian Iter"],
+                                        widenum = self.ReconstructionOptions.Reconstruction_VCG["Widening"],
+                                        mergecolor = self.ReconstructionOptions.Reconstruction_VCG["Vertex Splatting"],
+                                        simplification = self.ReconstructionOptions.Reconstruction_VCG["Post Merge Simplification"],
+                                        normalsmooth = self.ReconstructionOptions.Reconstruction_VCG["Presmooth iter"])
 
                     self.__mesh_num +=1
                     self.layers.append(Polymeshlabfusion.Mesh( self.ms,f"reconstructed{self.__mesh_num}", color=(0.2, 0.2, 0.2)))
                     self.current_step=len(self.layers)
+
+            psim.TreePop()
 
 
         chooseconnectedcomponent.ChooseCC.callback(self)
@@ -385,7 +429,13 @@ class PolyscopeGUI:
 
 
         if(psim.TreeNode('Smoothing Options')):
-            #["Depth Smooth", "HC Laplacian Smooth", "Laplacian Smooth", "Laplacian Smooth (surface preserving)","Scale Dependent Laplacian Smooth", "Taubin Smooth", "Two Step Smooth"]
+            #["Depth Smooth", 
+            #"HC Laplacian Smooth", 
+            #"Laplacian Smooth", 
+            #"Laplacian Smooth (surface preserving)",
+            #"Scale Dependent Laplacian Smooth", 
+            #"Taubin Smooth", 
+            #"Two Step Smooth"]
             psim.PushItemWidth(200)
             changed = psim.BeginCombo("Pick one", self.smoothingOptions.SmoothingOptions_Selected)
             if changed:
@@ -401,10 +451,11 @@ class PolyscopeGUI:
                 self.smoothingOptions.Depth_smooth()
                 if(psim.Button('Apply')):
                     self.ms.set_selection_none()
-                    self.ms.apply_coord_depth_smoothing(stepsmoothnum =self.smoothingOptions.DepthSmooth["Smoothing steps"],
-                                                        viewpoint = self.smoothingOptions.DepthSmooth["view point" ],
-                                                        delta=pymeshlab.PercentageValue(self.smoothingOptions.DepthSmooth["Strength"]),
-                                                        selected = self.smoothingOptions.DepthSmooth["Affect only selection"])
+                    self.ms.apply_coord_depth_smoothing(
+                            stepsmoothnum =self.smoothingOptions.DepthSmooth["Smoothing steps"],
+                            viewpoint = self.smoothingOptions.DepthSmooth["view point" ],
+                            delta=pymeshlab.PercentageValue(self.smoothingOptions.DepthSmooth["Strength"]),
+                            selected = self.smoothingOptions.DepthSmooth["Affect only selection"])
                     self.layers[self.current_step-1].Update()
 
 
@@ -419,16 +470,19 @@ class PolyscopeGUI:
             if self.smoothingOptions.SmoothingOptions_Selected == "Laplacian Smooth":
                 self.smoothingOptions.Laplacian_smooth()
                 if(psim.Button("Apply")):
-                    self.ms.apply_coord_laplacian_smoothing(stepsmoothnum=self.smoothingOptions.Laplace["Smoothing steps"], boundary=self.smoothingOptions.Laplace["1D Boundary Smoothing"],
-                                                            cotangentweight=self.smoothingOptions.Laplace["Cotangent weighting" ], selected =self.smoothingOptions.Laplace["Affect only selection"])
+                    self.ms.apply_coord_laplacian_smoothing(
+                            stepsmoothnum=self.smoothingOptions.Laplace["Smoothing steps"], 
+                            boundary=self.smoothingOptions.Laplace["1D Boundary Smoothing"],
+                            cotangentweight=self.smoothingOptions.Laplace["Cotangent weighting" ], 
+                            selected =self.smoothingOptions.Laplace["Affect only selection"])
                     self.layers[self.current_step-1].Update()
 
             if self.smoothingOptions.SmoothingOptions_Selected == "Laplacian Smooth (surface preserving)":
                 self.smoothingOptions.Laplacian_smooth_surface_preserving()
                 if(psim.Button("Apply")):
-                    self.ms.apply_coord_laplacian_smoothing_surface_preserving(selection=self.smoothingOptions.Laplace_surf_preserv["Update section"],
-                                                                                angledeg=self.smoothingOptions.Laplace_surf_preserv["Max Normal Dev"],
-                                                                                iterations=self.smoothingOptions.Laplace_surf_preserv["Iterations"])
+                    self.ms.apply_coord_laplacian_smoothing_surface_preserving(
+                            selection=self.smoothingOptions.Laplace_surf_preserv["Update section"],                                                              angledeg=self.smoothingOptions.Laplace_surf_preserv["Max Normal Dev"],
+                            iterations=self.smoothingOptions.Laplace_surf_preserv["Iterations"])
                     self.layers[self.current_step-1].Update()
 
 
@@ -437,9 +491,10 @@ class PolyscopeGUI:
                 self.smoothingOptions.Scale_dependant_Laplacian_smooth()
 
                 if(psim.Button('Apply')):
-                    self.ms.apply_coord_laplacian_smoothing_scale_dependent(stepsmoothnum=self.smoothingOptions.Scale_dep_Laplace["Smoothing Steps"],
-                                                                            delta= pymeshlab.PercentageValue(self.smoothingOptions.Scale_dep_Laplace["delta"]),
-                                                                            selected = self.smoothingOptions.Scale_dep_Laplace["Affect only selected faces"])
+                    self.ms.apply_coord_laplacian_smoothing_scale_dependent(
+                            stepsmoothnum=self.smoothingOptions.Scale_dep_Laplace["Smoothing Steps"],
+                            delta= pymeshlab.PercentageValue(self.smoothingOptions.Scale_dep_Laplace["delta"]),
+                            selected = self.smoothingOptions.Scale_dep_Laplace["Affect only selected faces"])
                     self.layers[self.current_step-1].Update()
 
 
@@ -467,6 +522,8 @@ class PolyscopeGUI:
 
                     self.layers[self.current_step-1].Update()
 
+            psim.TreePop()
+
 
 
 
@@ -484,7 +541,8 @@ class PolyscopeGUI:
             if self.GeometricMeasures_opt.MeasureOptions_selected == 'Scale dependent quadric Fitting':
                 self.GeometricMeasures_opt.curvature_by_scale_dependend_quadric_fitting()
                 if self.ms.current_mesh().has_vertex_scalar():
-                    self.layers[self.current_step-1].VisibleMesh.add_scalar_quantity('scalar curvature', self.ms.current_mesh().vertex_scalar_array())
+                    self.layers[self.current_step-1].VisibleMesh.add_scalar_quantity(
+                            'scalar curvature', self.ms.current_mesh().vertex_scalar_array())
 
                 if self.ms.current_mesh().has_vertex_color():
                     vc = self.ms.current_mesh().vertex_color_matrix()
@@ -495,7 +553,8 @@ class PolyscopeGUI:
             if self.GeometricMeasures_opt.MeasureOptions_selected == "Discrete Curvature":
                 self.GeometricMeasures_opt.Discrete_Curvature()
                 if self.ms.current_mesh().has_vertex_scalar():
-                    self.layers[self.current_step-1].VisibleMesh.add_scalar_quantity('scalar curvature', self.ms.current_mesh().vertex_scalar_array())
+                    self.layers[self.current_step-1].VisibleMesh.add_scalar_quantity(
+                            'scalar curvature', self.ms.current_mesh().vertex_scalar_array())
 
                 if self.ms.current_mesh().has_vertex_color():
                     vc = self.ms.current_mesh().vertex_color_matrix()
@@ -505,7 +564,8 @@ class PolyscopeGUI:
             if self.GeometricMeasures_opt.MeasureOptions_selected =="APSS Curvature":
                 self.GeometricMeasures_opt.APSS_curvature()
                 if self.ms.current_mesh().has_vertex_scalar():
-                    self.layers[self.current_step-1].VisibleMesh.add_scalar_quantity('scalar curvature', self.ms.current_mesh().vertex_scalar_array())
+                    self.layers[self.current_step-1].VisibleMesh.add_scalar_quantity(
+                            'scalar curvature', self.ms.current_mesh().vertex_scalar_array())
 
                 if self.ms.current_mesh().has_vertex_color():
                     vc = self.ms.current_mesh().vertex_color_matrix()
@@ -516,7 +576,8 @@ class PolyscopeGUI:
                 self.GeometricMeasures_opt.Geod_distance_from_point()
 
                 if self.ms.current_mesh().has_vertex_scalar():
-                    self.layers[self.current_step-1].VisibleMesh.add_scalar_quantity('scalar curvature', self.ms.current_mesh().vertex_scalar_array())
+                    self.layers[self.current_step-1].VisibleMesh.add_scalar_quantity(
+                            'scalar curvature', self.ms.current_mesh().vertex_scalar_array())
 
                 if self.ms.current_mesh().has_vertex_color():
                     vc = self.ms.current_mesh().vertex_color_matrix()
@@ -529,13 +590,19 @@ class PolyscopeGUI:
             if self.GeometricMeasures_opt.MeasureOptions_selected == 'Topological measures':
                 self.GeometricMeasures_opt.Topological_measures()
 
+            psim.TreePop()
+
         if(psim.TreeNode('Reconstruct Photos')):
             self.Slicing.Photoslicing()
 
             if(psim.Button('Compute Slices')):
                 mesh = self.ms.current_mesh()
-                values = {'ranges': {'x': (self.Slicing.start_x, self.Slicing.end_x), 'y': (self.Slicing.start_y, self.Slicing.end_y), 'z': (self.Slicing.start_z, self.Slicing.end_z)},
-                            'resolutions':{'x': self.Slicing.resolution_x, 'y': self.Slicing.resolution_y, 'z': self.Slicing.resolution_z}}
+                values = {'ranges': {'x': (self.Slicing.start_x, self.Slicing.end_x), 
+                                     'y': (self.Slicing.start_y, self.Slicing.end_y), 
+                                     'z': (self.Slicing.start_z, self.Slicing.end_z)},
+                          'resolutions': {'x': self.Slicing.resolution_x, 
+                                          'y': self.Slicing.resolution_y, 
+                                          'z': self.Slicing.resolution_z}}
                 new_mesh_vertices, self.Slicing.meshes = cuttingalongsurfaces.create_cuts(values, mesh)
                 new_mesh=pymeshlab.Mesh(vertex_matrix=new_mesh_vertices)
                 self.ms.add_mesh(new_mesh)
@@ -557,6 +624,8 @@ class PolyscopeGUI:
             if(psim.Button('Safe stack on top of original')):
                 self.filedialog_stack_on_original.set_active(True)
 
+            psim.TreePop()
+
 
         if(psim.TreeNode('Save File')):
             if(psim.Button('Save')):
@@ -565,6 +634,8 @@ class PolyscopeGUI:
 
             if(psim.Button('Save Project')):
                 self.filedialog_project.set_active(True)
+            
+            psim.TreePop()
 
         if self.folderdialog_load_viewpoints.get_active():
             self.folderdialog_load_viewpoints.askopenfile()

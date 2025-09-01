@@ -51,6 +51,8 @@ class ChooseCC(Polymeshlabfusion.Mesh):
             if PolyGUI.current_step>1:
                 PolyGUI.layers[PolyGUI.current_step-1].set_enabled(True)
             return
+        else:
+            psim.TreePop()
 
 
 
@@ -75,7 +77,11 @@ class ChooseCC(Polymeshlabfusion.Mesh):
         if cls.connectedcomp !=[]:
             cls.connectedcomp[cls.current_cc-1].set_current_mesh()
 
-        current_step_clicked, cls.current_cc = psim.SliderInt('Connected component no', cls.current_cc, v_min=1, v_max=np.max([len(cls.connectedcomp), 1]))
+        current_step_clicked, cls.current_cc = psim.SliderInt(
+                'Connected component no', 
+                cls.current_cc, 
+                v_min=1, 
+                v_max=np.max([len(cls.connectedcomp), 1]))
 
         if psim.Button('This one'):
             Chosen_one = cls.connectedcomp[cls.current_cc-1]
