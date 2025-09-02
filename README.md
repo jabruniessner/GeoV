@@ -46,7 +46,7 @@ The program is currently unfortunaltely only supported on Linux (Tested on Ubunt
 Polyscope-py must be downloaded seperately from this repository: https://github.com/jabrucohee/polyscope-py. Or more easily, this repository can be cloned recursively:
 
 ```
-git clone --recursive
+git clone --recursive https://github.com/jabruniessner/GeoV.git
 ``` 
 
 ### Linux:
@@ -54,7 +54,7 @@ The included bash script "Installation.sh" creates a virtual environment install
 If you are interested in this, simply run in your terminal `git clone --recursive https://github.com/jabrucohee/GeoV.git` cd to the cloned directory and run `bash Installation.sh`
 
 ### Windows:
-If you would like to use Windows, there is also an installation script that can be used. Again, just run `git clone --recursive https://github.com/jabrucohee/GeoV.git` and then run `Installation.bat`. This will create a virtual environement install all the necessary dependencies and compile polyscope.
+If you would like to use Windows, there is also an installation script that can be used. Again, just run `git clone --recursive https://github.com/jabrucohee/GeoV.git` and then run `Installation.ps1`. This will create a virtual environement install all the necessary dependencies and compile polyscope.
 
 ### Mac:
 As already mentioned above, you can try installing all dependencies required and then then start it manually.
