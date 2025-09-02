@@ -1,0 +1,3 @@
+[submodule "polyscope-py"]
+	path = polyscope-py
+	url = https://github.com/jabruniessner/polyscope-py.git
