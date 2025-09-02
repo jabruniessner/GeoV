@@ -2,8 +2,8 @@
 pip3 install virtualenv
 virtualenv reconProgram
 source reconProgram/bin/activate
-pip3 install -r requirements.txt
+pip install -r requirements.txt
 cd polyscope-py
-python3 setup.py install
+python -m pip install .
 cd ..
 

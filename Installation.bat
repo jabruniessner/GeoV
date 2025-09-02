@@ -1,4 +1,4 @@
-python -m venv reconProgram
+python -m virtualenv reconProgram
 call reconProgram\Scripts\activate.ps1
 cd polyscope-py
 python -m pip install .
