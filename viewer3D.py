@@ -18,7 +18,17 @@ import dummyloadingfunction
 
 class PolyscopeGUI:
 
-    def __init__(self,master,file, channelnum, Name, point_cloud, view_point_x, view_point_y, view_point_z, resolutions, ranges,  faces = None):
+    def __init__(self,
+                 master,
+                 file, 
+                 channelnum, 
+                 Name, 
+                 point_cloud, 
+                 view_point_x, 
+                 view_point_y, 
+                 view_point_z, 
+                 resolutions, 
+                 ranges,  faces = None):
 
 
         '''This is the 3Dviewer class'''
@@ -76,11 +86,20 @@ class PolyscopeGUI:
         self.__mesh_num = 1
 
         #creating a filedialogs for all cases
-        self.filedialog_stack = Filedialog.Filedialog(formats = ['*.tif'], savingfunction = self.save_stack, name = "Choose File", mode = 'File')
-        self.filedialog_stack_on_original = Filedialog.Filedialog(formats = ['*.tif'], savingfunction=  self.save_stack_on_original, name="Choose File", mode = 'File')
-        self.filedialog_mesh = Filedialog.Filedialog(formats = ['*.ply', '*.obj', '*.stl'], savingfunction = self.save_mesh, name = "Choose File", mode = 'File')
-        self.filedialog_project = Filedialog.Filedialog(formats = ["[Dir]"], savingfunction = self.save_project, name = "Choose directory", mode = 'Dir')
-        self.folderdialog_load_viewpoints = Askopenfolder.Askopenfolder(formats=["[Dir]"], loadingfunction = probecontrol.ViewPoints.loadviewpoints,
+        self.filedialog_stack = Filedialog.Filedialog(formats = ['*.tif'], 
+                                                      savingfunction = self.save_stack, 
+                                                      name = "Choose File", mode = 'File')
+        self.filedialog_stack_on_original = Filedialog.Filedialog(formats = ['*.tif'], 
+                                                                  savingfunction=  self.save_stack_on_original, 
+                                                                  name="Choose File", mode = 'File')
+        self.filedialog_mesh = Filedialog.Filedialog(formats = ['*.ply', '*.obj', '*.stl'], 
+                                                     savingfunction = self.save_mesh, 
+                                                     name = "Choose File", mode = 'File')
+        self.filedialog_project = Filedialog.Filedialog(formats = ["[Dir]"], 
+                                                        savingfunction = self.save_project, 
+                                                        name = "Choose directory", mode = 'Dir')
+        self.folderdialog_load_viewpoints = Askopenfolder.Askopenfolder(formats=["[Dir]"], 
+                                                                        loadingfunction = probecontrol.ViewPoints.loadviewpoints,
                                                                         name="Choose directory", mode ='Dir')
 
 
@@ -138,7 +157,10 @@ class PolyscopeGUI:
 
 
         if(psim.TreeNode('Steps')):
-            current_step_clicked, self.current_step = psim.SliderInt('Mesh no', self.current_step, v_min=1, v_max=len(self.layers))
+            current_step_clicked, self.current_step = psim.SliderInt('Mesh no', 
+                                                                     self.current_step, 
+                                                                     v_min=1, 
+                                                                     v_max=len(self.layers))
             if(psim.Button('Delete current mesh') and self.current_step > 0):
                 if self.layers != []:
                     print(sys.getrefcount(self.layers[0]))
@@ -166,14 +188,20 @@ class PolyscopeGUI:
             psim.PushItemWidth(60)
             best_sampe_pool_size, self.best_sample_pool_size = psim.InputInt('Best sample Pool size', self.best_sample_pool_size)
             psim.PopItemWidth()
-            exact_number_of_samples, self.exact_number_of_samples = psim.Checkbox('Exact number of samples', self.exact_number_of_samples)
+            exact_number_of_samples, 
+            self.exact_number_of_samples = psim.Checkbox('Exact number of samples', 
+                                                         self.exact_number_of_samples)
             psim.SameLine()
             if(psim.Button("Simplify")):
                 self.layers[self.current_step-1].set_current_mesh()
-                self.ms.generate_simplified_point_cloud(samplenum=self.sample_number, radius=pymeshlab.PercentageValue(self.sub_sample_perc),
-                                                            bestsampleflag = self.best_sample_bool, bestsamplepool=self.best_sample_pool_size, exactnumflag = self.exact_number_of_samples)
+                self.ms.generate_simplified_point_cloud(samplenum=self.sample_number, 
+                                                        radius=pymeshlab.PercentageValue(self.sub_sample_perc),
+                                                        bestsampleflag = self.best_sample_bool, 
+                                                        bestsamplepool=self.best_sample_pool_size, 
+                                                        exactnumflag = self.exact_number_of_samples)
                 self.__simplified_count += 1
-                self.layers.append(Polymeshlabfusion.Mesh(self.ms, f"simplified cloud {self.__simplified_count}", (.2,.7,.2)))
+                self.layers.append(Polymeshlabfusion.Mesh(self.ms, 
+                                                          f"simplified cloud {self.__simplified_count}", (.2,.7,.2)))
 
 
                 #proceed to the next step
@@ -194,8 +222,10 @@ class PolyscopeGUI:
 
             psim.SameLine()
 
-            psim.PushItemWidth(100)
-            neighbour_num, self.number_of_neighbours = psim.InputInt('Number of neighbours', self.number_of_neighbours, step = 1)
+            psim.PushItemWidth(150)
+            neighbour_num, self.number_of_neighbours = psim.InputInt('Number of neighbours', 
+                                                                     self.number_of_neighbours, 
+                                                                     step = 1)
             psim.PopItemWidth()
 
 
@@ -217,7 +247,8 @@ class PolyscopeGUI:
                 if not self.preview_exist:
                     self.layers[self.current_step-1].set_current_mesh()
                     self.ms.set_selection_none()
-                    self.ms.compute_selection_point_cloud_outliers(propthreshold=self.probability, knearest = self.number_of_neighbours)
+                    self.ms.compute_selection_point_cloud_outliers(propthreshold=self.probability, 
+                                                                   knearest = self.number_of_neighbours)
 
 
                 self.ms.generate_copy_of_current_mesh()
@@ -260,13 +291,13 @@ class PolyscopeGUI:
             probecontrol.ViewPoints.callback()
 
 
-            psim.PushItemWidth(100)
+            psim.PushItemWidth(150)
             smoothiter_select, self.smoothiter= psim.InputInt('Smoothiterations', self.smoothiter, step = 1)
             psim.PopItemWidth()
 
             psim.SameLine()
 
-            psim.PushItemWidth(100)
+            psim.PushItemWidth(150)
             number_of_neighbours_normals_selected, self.number_of_neighbours_normals= psim.InputInt(
                     'Number of neighbours', 
                     self.number_of_neighbours_normals, step = 1)
@@ -274,7 +305,7 @@ class PolyscopeGUI:
 
 
             #Defining the normals calculation procedure
-            if(psim.Button('Calculate Normals')):
+            if(psim.Button('Calculate normals')):
                 if not self.multiple_view_points:
                     self.layers[self.current_step-1].set_current_mesh()
                     self.ms.compute_normal_for_point_clouds(
