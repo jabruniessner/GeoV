@@ -141,7 +141,14 @@ class StartpageGUI:
 
         if file[-4:]==".czi":
             czi=czifile.CziFile(file)
-            self.__resolutions = np.squeeze(czi.asarray())[0].shape
+
+            num_dims = len(np.squeeze(czi.asarray()).shape)
+            if num_dims == 3:
+                self.__resolutions = np.squeeze(czi.asarray()).shape
+            elif num_dims == 4:
+                self.__resolutions = np.squeeze(czi.asarray())[0].shape
+
+            #self.__resolutions = np.squeeze(czi.asarray())[0].shape
             metadata = czi.metadata()
             x, y, z = self.duty.findvoxelsizes(metadata)
             self.VoxelsizesMenu.voxel_size_x.delete(0, END)
@@ -151,6 +158,8 @@ class StartpageGUI:
             self.VoxelsizesMenu.voxel_size_x.insert(0,f"{x:.4f}")
             self.VoxelsizesMenu.voxel_size_y.insert(0,f"{y:.4f}")
             self.VoxelsizesMenu.voxel_size_z.insert(0,f"{z:.4f}")
+
+            #breakpoint()
 
 
             self.__ranges = ((0, x*self.__resolutions[2]), (0, y*self.__resolutions[1]),(0, z*self.__resolutions[0]))
@@ -196,12 +205,14 @@ class StartpageGUI:
         czi=thresholdfinder.get_czi_images(file, self.__channelnum)
         window=Toplevel(self.master)
         Thresholdchooser=thresholdfinder.Imageviewer(window, czi)
-        button_done=ttk.Button(window, text="Use!", command= lambda : [self.threshold.delete(0, "end"),
-                                                                        self.threshold.insert(0, Thresholdchooser.threshold_external),
-                                                                        self.medianfilter.delete(0, "end"),
-                                                                        self.medianfilter.insert(0,Thresholdchooser.denoisfiltersize),
-                                                                        window.withdraw(),
-                                                                        window.destroy(), window.update()])
+        button_done=ttk.Button(window, text="Use!", 
+                               command= lambda : [self.threshold.delete(0, "end"),
+                                                  self.threshold.insert(0, Thresholdchooser.threshold_external),
+                                                  self.medianfilter.delete(0, "end"),
+                                                  self.medianfilter.insert(0,Thresholdchooser.denoisfiltersize),
+                                                  window.withdraw(),
+                                                  window.destroy(), 
+                                                  window.update()])
         button_done.grid(row=4, column=0)
 
     def get_values_from_GUI(self):

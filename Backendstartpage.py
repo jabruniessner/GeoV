@@ -117,10 +117,15 @@ class ReconProgram:
 
             img=None
             if file[-4:]=='.czi':
-                img = np.squeeze(czifile.CziFile(file).asarray())[channelnum]
+                img = np.squeeze(czifile.CziFile(file).asarray()) #[channelnum]
+                if img.shape == 4:
+                    img = img[channelnum]
+                
                 print(img.shape)
+            
             elif file[-4:]=='.tif':
                 img = np.squeeze(tifffile.TiffFile(file).asarray())
+            
             elif file[-4:]=='.lif':
                 from readlif.reader import LifFile
                 new_file = LifFile(file)
@@ -136,7 +141,12 @@ class ReconProgram:
     def get_points_from_file(self, file, values):
         os.chdir(self.CurrentFolder)
         img=self.images_from_file(file, values["channel number"])
-        return self.pointcloud_finder(img, values["voxel size x"], values["voxel size y"], values["voxel size z"], values["threshold"], values["filtersize"])
+        return self.pointcloud_finder(img, 
+                                      values["voxel size x"], 
+                                      values["voxel size y"], 
+                                      values["voxel size z"], 
+                                      values["threshold"], 
+                                      values["filtersize"])
 
     def findmaxposition(self, imagestack):
         #Find the image with the highest intensities

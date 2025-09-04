@@ -11,7 +11,9 @@ import time
 def get_czi_images(imagefile, channelnum):
     if(imagefile[-4:]==".czi"):
         czi_file=czifile.CziFile(imagefile)
-        czi= np.squeeze(czi_file.asarray())[channelnum]
+        czi= np.squeeze(czi_file.asarray())#[channelnum]
+        if len(czi.shape)==4:
+            czi=czi[channelnum]
         return czi
     elif(imagefile[-4:]==".tif"):
         tiff_file = tifffile.TiffFile(imagefile)
